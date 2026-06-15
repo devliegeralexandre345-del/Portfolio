@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alexandre Devlieger — Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0e17;
+            --grid-color: rgba(79, 140, 255, 0.05);
+            --card-bg: rgba(17, 24, 39, 0.8);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #4f8cff;
+            --accent-glow: rgba(79, 140, 255, 0.5);
+            --accent-hover: #3b76e5;
+            --border-color: #1e293b;
+        }
+
+        /* --- Scrollbar Personnalisée --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3b5c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 12px;
+            border: 2px solid var(--accent);
+            margin-bottom: 1.5rem;
+            background: var(--card-bg);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            box-shadow: 0 0 20px var(--accent-glow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 0 30px var(--accent);
+        }
+
+        /* --- Effet Glitch CSS pur sur le titre --- */
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1:hover::before, h1:hover::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+        }
+
+        h1:hover::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        h1:hover::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9;
+            clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip-path: inset(20% 0 80% 0); }
+            20% { clip-path: inset(60% 0 10% 0); }
+            40% { clip-path: inset(40% 0 50% 0); }
+            60% { clip-path: inset(80% 0 5% 0); }
+            80% { clip-path: inset(10% 0 70% 0); }
+            100% { clip-path: inset(30% 0 50% 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(10% 0 60% 0); }
+            20% { clip-path: inset(30% 0 20% 0); }
+            40% { clip-path: inset(70% 0 10% 0); }
+            60% { clip-path: inset(20% 0 50% 0); }
+            80% { clip-path: inset(50% 0 30% 0); }
+            100% { clip-path: inset(5% 0 80% 0); }
+        }
+
+        /* --- Animation Machine à écrire (Typing Effect) --- */
+        .subtitle-container {
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            color: var(--accent);
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--accent);
+            width: 0;
+            /* 26ch = nombre de caractères approximatif du texte */
+            animation: typing 2.5s steps(26, end) forwards, blink-caret 0.8s step-end infinite;
+        }
+
+        @keyframes typing {
+            to { width: 26ch; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent); }
+        }
+
+        .location {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeIn 1s ease 2.5s forwards; /* Apparaît après le typing */
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .section h2 {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .tech-category { margin-bottom: 2rem; }
+        .tech-category:last-child { margin-bottom: 0; }
+        .tech-category h3 {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        /* --- Effet Néon sur les Tags --- */
+        .tag {
+            background: rgba(30, 41, 59, 0.7);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: default;
+        }
+
+        .tag:hover {
+            color: #fff;
+            border-color: var(--accent);
+            background: rgba(79, 140, 255, 0.1);
+            box-shadow: 0 0 12px var(--accent-glow), inset 0 0 8px var(--accent-glow);
+            text-shadow: 0 0 8px #fff;
+            transform: translateY(-2px);
+        }
+
+        /* --- Animation de Bordure Avancée (Conic Gradient) --- */
+        .project-card {
+            position: relative;
+            padding: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1;
+            margin-top: 1rem;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                transparent, 
+                transparent, 
+                transparent, 
+                var(--accent)
+            );
+            animation: rotate-border 4s linear infinite;
+            z-index: -2;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            inset: 2px; /* Épaisseur de la bordure animée */
+            background: #0f172a;
+            border-radius: 6px;
+            z-index: -1;
+        }
+
+        @keyframes rotate-border {
+            100% { transform: rotate(360deg); }
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-meta {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-desc {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-desc ul { list-style-type: none; padding-left: 0; }
+        .project-desc li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .project-desc li::before {
+            content: ">_";
+            font-family: 'Fira Code', monospace;
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: rgba(79, 140, 255, 0.1);
+        }
+
+        .github-link {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .approach-item {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Effet de soulèvement 3D au survol */
+        .approach-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(79, 140, 255, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .approach-item .icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .approach-item h4 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .approach-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding: 2rem 0;
+            font-family: 'Fira Code', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="profile-img">AD</div>
+            <!-- Ajout du data-text pour l'effet glitch -->
+            <h1 class="glitch" data-text="Alexandre Devlieger">Alexandre Devlieger</h1>
+            
+            <div class="subtitle-container">
+                <p class="subtitle">Développeur Logiciel & Web</p>
+            </div>
+            
+            <p class="location">Mouscron, Belgique</p>
+        </header>
+
+        <section class="section">
+            <h2>01. À propos</h2>
+            <p>
+                Étudiant en 5ᵉ année secondaire, développeur autonome passionné par l’architecture logicielle, 
+                le développement natif et les technologies web. Je conçois et réalise des applications complètes, 
+                de l’idée jusqu’au déploiement, avec une approche centrée sur la performance et l'optimisation.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>02. Stack & Outils</h2>
+            <div class="tech-category">
+                <h3>Développement Logiciel (Natif & Back-end)</h3>
+                <div class="tags">
+                    <span class="tag">C++</span>
+                    <span class="tag">C#</span>
+                </div>
+            </div>
+            <div class="tech-category">
+                <h3>Développement Web</h3>
+                <div class="tags">
+                    <span class="tag">HTML</span>
+                    <span class="tag">CSS</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">PHP</span>
+                </div>
+            </div>
+            <div class="tech-category">
+                <h3>Bases de données & DevOps</h3>
+                <div class="tags">
+                    <span class="tag">SQL</span>
+                    <span class="tag">Docker</span>
+                </div>
+            </div>
+            <div class="tech-category">
+                <h3>Build & IA</h3>
+                <div class="tags">
+                    <span class="tag">CMake</span>
+                    <span class="tag">Webpack</span>
+                    <span class="tag">LLMs (Ollama)</span>
+                </div>
+            </div>
+            <div class="tech-category">
+                <h3>Versionning</h3>
+                <div class="tags">
+                    <span class="tag">Git</span>
+                    <span class="tag">GitHub</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>03. Projet Phare</h2>
+            <!-- La div de la carte gère l'animation de bordure en CSS pur -->
+            <div class="project-card">
+                <h3>Lorica</h3>
+                <div class="project-meta">
+                    [ Environnement de Développement Intégré / IDE ]
+                </div>
+                <div class="project-desc">
+                    <ul>
+                        <li>Conception d’une architecture logicielle modulaire robuste.</li>
+                        <li>Gestion avancée des environnements de compilation (CMake, Webpack).</li>
+                        <li>Intégration d’une assistance IA fonctionnant <strong>100% en local</strong>.</li>
+                        <li>Optimisation des performances sur OS Windows.</li>
+                    </ul>
+                </div>
+                <a href="https://github.com/devliegeralexandre345-del?tab=repositories" class="btn" target="_blank">
+                    Voir le code source
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>04. Approche Technique</h2>
+            <div class="approach-grid">
+                <div class="approach-item">
+                    <div class="icon">⚙️</div>
+                    <h4>Architecture</h4>
+                    <p>De l’architecture au déploiement, maîtrise du cycle de vie complet d’un logiciel.</p>
+                </div>
+                <div class="approach-item">
+                    <div class="icon">🔧</div>
+                    <h4>Diagnostic</h4>
+                    <p>Forte appétence pour le débogage approfondi et l'optimisation bas niveau.</p>
+                </div>
+                <div class="approach-item">
+                    <div class="icon">🚀</div>
+                    <h4>Innovation</h4>
+                    <p>Veille technologique active et intégration d'outils modernes (IA locale, conteneurisation).</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="github-link">
+            <a href="https://github.com/devliegeralexandre345-del" class="btn btn-outline" target="_blank">
+                Explorer mon profil GitHub
+            </a>
+        </div>
+
+        <footer>
+            <p>// © 2026 Alexandre Devlieger — Built for performance.</p>
+        </footer>
+    </div>
+</body>
+</html>
